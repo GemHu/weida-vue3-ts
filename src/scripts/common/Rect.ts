@@ -2,6 +2,25 @@ import Point from './Point';
 // import { HitTestPosition } from '../editor/HitTest';
 
 class Rect {
+	// ========================//
+	// 静态方法区域，需要放到开头
+	// ========================//
+	public static createRectByPoint(startPoint: Point, endPoint: Point) {
+		const x = Math.min(startPoint.x, endPoint.x);
+		const y = Math.min(startPoint.y, endPoint.y);
+		const width = Math.abs(startPoint.x - endPoint.x);
+		const height = Math.abs(startPoint.y - endPoint.y);
+		return new Rect(x, y, width, height);
+	}
+
+	// ========================//
+	// 静态属性区域
+	// ========================//
+
+	// ========================//
+	// 成员属性区域
+	// ========================//
+
 	public x = 0;
 	public y = 0;
 	public width = 0;
@@ -44,7 +63,7 @@ class Rect {
 	}
 
 	public setLeft(value: number) {
-		let right = this.x + this.width;
+		const right = this.x + this.width;
 		if (value > right - this.minWidth) {
 			value = right - this.minWidth;
 		}
@@ -53,7 +72,7 @@ class Rect {
 	}
 
 	public setTop(value: number) {
-		let bottom = this.y + this.height;
+		const bottom = this.y + this.height;
 		if (value > bottom - this.minHeight) {
 			value = bottom - this.minHeight;
 		}
@@ -147,14 +166,6 @@ class Rect {
 			left = left.x;
 		}
 		return this.getLeft() < right && left < this.getRight() && this.getTop() < bottom && top < this.getBottom();
-	}
-
-	public static createRectByPoint(startPoint: Point, endPoint: Point) {
-		let x = Math.min(startPoint.x, endPoint.x);
-		let y = Math.min(startPoint.y, endPoint.y);
-		let width = Math.abs(startPoint.x - endPoint.x);
-		let height = Math.abs(startPoint.y - endPoint.y);
-		return new Rect(x, y, width, height);
 	}
 
 	/**

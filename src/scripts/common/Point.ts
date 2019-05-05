@@ -1,16 +1,23 @@
 import Rect from './Rect';
 
 class Point {
-	x: number;
-	y: number;
+	// ========================//
+	// 静态方法区域
+	// ========================//
+
+	/**
+	 * 获取一个空实例；
+	 */
+	public static getEmptyPoint() {
+		return new Point(0, 0);
+	}
+
+	public x: number;
+	public y: number;
 
 	constructor(x: number, y: number) {
 		this.x = x || 0;
 		this.y = y || 0;
-	}
-
-	public static getEmptyPoint() {
-		return new Point(0, 0);
 	}
 
 	public isEmpty() {

@@ -4,12 +4,11 @@
 
 <script>
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import RulerContainer from '../scripts/editor/RulerContainer'
+import RulerContainer from '../scripts/editor/RulerContainer';
 import { ItemTypes } from '../scripts/editor/ItemCreator';
 
-@Component
+@Component({})
 export default class LabelEditor extends Vue {
-
 	// data() {
 	// 	return {
 	// 	}
