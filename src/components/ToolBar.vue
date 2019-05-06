@@ -40,52 +40,49 @@
 	</div>
 </template>
 
-<script>
-// import { ItemTypes } from '../scripts/editor/ItemCreator';
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import { ItemTypes } from '@/scripts/editor/ItemCreator';
 
-export default {
+@Component
+export default class ToolBar extends Vue {
 	// name: 'toolbar',
-	// data() {
-	// 	return {};
-	// },
-	// methods: {
-	// 	/**
-	// 	 * 修改当前绘制的目标；
-	// 	 */
-	// 	changeDrawTarget(e) {
-	// 		let ele = this.getElementByClass(e.target, 'menu-item');
-	// 		if (!ele) {
-	// 			return;
-	// 		}
+		/**
+		 * 修改当前绘制的目标；
+		 */
+	public changeDrawTarget(e: any) {
+		const ele = this.getElementByClass(e.target, 'menu-item');
+		if (!ele) {
+			return;
+		}
 
-	// 		let classList = ele.className ? ele.className.split(' ') : [];
-	// 		this.$store.commit('setDrawType', this.getDrawType(classList[1]));
-	// 	},
-	// 	getElementByClass(el, className) {
-	// 		if (!el) {
-	// 			return el;
-	// 		}
-	// 		let classList = el.className ? el.className.split(' ') : [];
-	// 		if (classList.indexOf(className) >= 0) {
-	// 			return el;
-	// 		}
+		const classList = ele.className ? ele.className.split(' ') : [];
+		this.$store.commit('setDrawType', this.getDrawType(classList[1]));
+	}
+	public getElementByClass(el: any, className: string): any {
+		if (!el) {
+			return el;
+		}
+		const classList = el.className ? el.className.split(' ') : [];
+		if (classList.indexOf(className) >= 0) {
+			return el;
+		}
 
-	// 		return this.getElementByClass(el.parentNode, className);
-	// 	},
-	// 	getDrawType(oldType) {
-	// 		switch (oldType) {
-	// 			default:
-	// 				return ItemTypes.None;
-	// 			case 'line':
-	// 				return ItemTypes.Line;
-	// 			case 'rect':
-	// 				return ItemTypes.Rect;
-	// 			case 'text':
-	// 				return ItemTypes.Text;
-	// 		}
-	// 	},
-	// },
-};
+		return this.getElementByClass(el.parentNode, className);
+	}
+	public getDrawType(oldType: string) {
+		switch (oldType) {
+			default:
+				return ItemTypes.None;
+			case 'line':
+				return ItemTypes.Line;
+			case 'rect':
+				return ItemTypes.Rect;
+			// case 'text':
+			// 	return ItemTypes.Text;
+		}
+	}
+}
 </script>
 
 <style scoped>

@@ -37,19 +37,20 @@
 	</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+
+@Component
+export default class MenuBar extends Vue {
 	// name: 'menubar',
-	// data(){
-	// 	return {
-	// 	}
-	// },
-	// methods: {
-	// 	doPrint() {
-	// 		this.$store.commit('doPrint');
-	// 	}
-	// }
-};
+	/**
+	 * doPrint
+	 */
+	public doPrint() {
+		this.$store.commit('doPrint');
+	}
+}
+
 </script>
 
 <style>

@@ -3,7 +3,7 @@ import DzCanvas from '../helpers/DzCanvas';
 import LabelEditor from './LabelEditor';
 
 class RulerContainer {
-	public LabelEditor: any;
+	public LabelEditor: LabelEditor;
 	public labelPanel: any;
 	public param: any;
 	public element: any;
@@ -21,7 +21,7 @@ class RulerContainer {
 		// 将标尺所对应的canvas添加到父容器中
 		this.getLabelPanel();
 		//
-		this.LabelEditor = LabelEditor.getInstance(this.labelPanel, null);
+		this.LabelEditor = LabelEditor.getInstance(this.labelPanel);
 		// 显示标签
 		this.updateLabel();
 		// 显示标尺信息；
@@ -128,8 +128,8 @@ class RulerContainer {
 		// 2、更新标尺的刻度；
 		// 2.1、横向标尺
 		const label = this.LabelEditor.LabelControl;
-		const unitX = labelRegion.width / label.widthMM;
-		const unitY = labelRegion.height / label.heightMM;
+		const unitX = labelRegion.width / label.ShownWidthMM;
+		const unitY = labelRegion.height / label.ShownHeightMM;
 		this.rulerCtx.fillRect(0, 0, cWidth, rulerWidth, '#F0F0F0');
 		// 从标签左上角开始，向右绘制标尺刻度；
 		this.rulerCtx.setStrokeColor(this.param.posScaleColor);

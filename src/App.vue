@@ -14,7 +14,7 @@
 				<tool-bar/>
 			</div>
 			<div class="content-center">
-				<label-editor/>
+				<Editor/>
 			</div>
 			<div class="content-right">
 				<router-view/>
@@ -29,12 +29,13 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 //
 import ToolBar from './components/ToolBar.vue';
 import MenuBar from '@/components/MenuBar.vue';
-import LabelEditor from './components/LabelEditor.vue';
+import Editor from './components/Editor.vue';
 
 @Component({
 	components: {
 		ToolBar,
 		MenuBar,
+		Editor,
 	},
 })
 export default class App extends Vue {}

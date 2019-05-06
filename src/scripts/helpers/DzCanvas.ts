@@ -1,6 +1,6 @@
 class DzCanvas {
 	public canvas: HTMLCanvasElement;
-	public ctx: any;
+	public ctx: CanvasRenderingContext2D;
 	public defaultLineWidth: number;
 	public defaultColor: string;
 	public fontName: string;
@@ -16,7 +16,7 @@ class DzCanvas {
 	 */
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
-		this.ctx = this.canvas.getContext('2d');
+		this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
 		this.defaultLineWidth = 3;
 		this.defaultColor = 'black';
 		this.fontName = 'Arial';
@@ -90,10 +90,10 @@ class DzCanvas {
 		this.fontSize = fontSize;
 	}
 
-	public drawLine(x1: number, y1: number, x2: number, y2: number, lineWidth: number, lineColor: any) {
+	public drawLine(x1: number, y1: number, x2: number, y2: number, lineWidth?: number, lineColor?: any) {
 		this.ctx.beginPath();
 		// 设置直线宽度
-		this.ctx.lineWidth = this.getLineWidth(lineWidth);
+		this.ctx.lineWidth = this.getLineWidth(lineWidth || 0);
 		// 设置直线颜色
 		this.ctx.strokeStyle = this.getStrokeColor(lineColor);
 		this.ctx.moveTo(x1, y1);
@@ -101,24 +101,24 @@ class DzCanvas {
 		this.ctx.stroke();
 	}
 
-	public drawRect(x: number, y: number, width: number, height: number, lineWidth: number, color: any) {
+	public drawRect(x: number, y: number, width: number, height: number, lineWidth?: number, color?: any) {
 		// 为了避免出现毛边，需要对x,y,width,height做些处理
 		x = Math.round(x) + 0.5;
 		y = Math.round(y) + 0.5;
 		width = Math.round(width);
 		height = Math.round(height);
 		// 设置直线宽度
-		this.ctx.lineWidth = this.getLineWidth(lineWidth);
+		this.ctx.lineWidth = this.getLineWidth(lineWidth || 0);
 		// 设置直线颜色
 		this.ctx.strokeStyle = this.getStrokeColor(color);
 		this.ctx.strokeRect(x, y, width, height);
 	}
 
-	public drawDashRect(x: number, y: number, width: number, height: number, lineWidth: number, dashArray: number[], color: any) {
+	public drawDashRect(x: number, y: number, width: number, height: number, lineWidth?: number, dashArray?: number[], color?: any) {
 		dashArray = dashArray || [];
 		if (this.supportLineDash) {
 			// 设置直线宽度
-			this.ctx.lineWidth = this.getLineWidth(lineWidth);
+			this.ctx.lineWidth = this.getLineWidth(lineWidth || 0);
 			// 设置直线颜色
 			this.ctx.strokeStyle = this.getStrokeColor(color);
 			this.ctx.setLineDash(dashArray);
@@ -134,7 +134,7 @@ class DzCanvas {
 		}
 	}
 
-	public drawDashLine(x1: number, y1: number, x2: number, y2: number, lineWidth: number) {
+	public drawDashLine(x1: number, y1: number, x2: number, y2: number, lineWidth?: number) {
 		this.drawLine(x1, y1, x2, y2, lineWidth, null);
 	}
 

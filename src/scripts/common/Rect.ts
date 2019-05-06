@@ -1,4 +1,6 @@
 import Point from './Point';
+import { Base } from '../datas/PrintData';
+import { HitTestPosition } from '../editor/HitTest';
 // import { HitTestPosition } from '../editor/HitTest';
 
 class Rect {
@@ -28,7 +30,10 @@ class Rect {
 	public minWidth = 0;
 	public minHeight = 0;
 
-	constructor(x: any, y: any, width: number, height: number) {
+	constructor();
+	constructor(startPoint: Point, endPoint: Point);
+	constructor(x: number, y: number, width: number, height: number);
+	constructor(x?: number | Point, y?: number | Point, width?: number, height?: number) {
 		if (x instanceof Point && y instanceof Point) {
 			this.x = Math.min(x.x, y.x);
 			this.y = Math.min(x.y, y.y);
@@ -37,8 +42,8 @@ class Rect {
 		} else {
 			this.x = typeof x === 'number' ? x : 0;
 			this.y = typeof y === 'number' ? y : 0;
-			this.width = width;
-			this.height = height;
+			this.width = width || 0;
+			this.height = height || 0;
 		}
 	}
 
@@ -85,7 +90,7 @@ class Rect {
 	 * @param {number} value 矩形框有边框坐标位置；
 	 * @param {boolean} force 是否进行强制修改？如果是，则不考虑最小宽度，当value小于x的时候，强制切换x值，否则value值不能小于x的值；
 	 */
-	public setRight(value: number, force: boolean) {
+	public setRight(value: number, force: boolean = false) {
 		if (force) {
 			if (value < this.x) {
 				this.width = this.x - value;
@@ -101,7 +106,7 @@ class Rect {
 		}
 	}
 
-	public setBottom(value: number, force: boolean) {
+	public setBottom(value: number, force: boolean = false) {
 		if (force) {
 			if (value < this.y) {
 				this.height = this.y - value;
@@ -154,16 +159,22 @@ class Rect {
 		}
 	}
 
+	public isIntersect(region: Rect): boolean;
+	public isIntersect(left: number, top: number, right: number, bottom: number): boolean;
 	/**
 	 * 判断当前矩形框与目标矩形框是否有交集；
 	 * @param {Rect} rect 目标矩形框；
 	 */
-	public isIntersect(left: any, top: number, right: number, bottom: number) {
+	public isIntersect(left: number | Rect, top?: number, right?: number, bottom?: number): boolean {
 		if (left instanceof Rect) {
 			bottom = left.getBottom();
 			right = left.getRight();
 			top = left.y;
 			left = left.x;
+		} else {
+			top = top || 0;
+			right = right || 0;
+			bottom = bottom || 0;
 		}
 		return this.getLeft() < right && left < this.getRight() && this.getTop() < bottom && top < this.getBottom();
 	}
@@ -171,8 +182,14 @@ class Rect {
 	/**
 	 * 将当前实例复制一份并返回；
 	 */
-	public clone() {
-		return new Rect(this.x, this.y, this.width, this.height);
+	public clone(copy?: Rect) {
+		copy = copy || new Rect();
+		copy.x = this.x;
+		copy.y = this.y;
+		copy.width = this.width;
+		copy.height = this.height;
+
+		return copy;
 	}
 
 	public containsPoint(point: Point) {
@@ -301,40 +318,40 @@ class Rect {
 	 * 通过点击测试，获取当前鼠标在当前矩形区域内的位置；
 	 * @param {Point} point 目标坐标点；
 	 */
-	public hitTest(point: Point, radius: number) {
-		// radius = radius || 5;
-		// let outer = this.getOuterAnchorRegion(radius);
-		// if (!(point instanceof Point) || !outer.containsPoint(point)) {
-		// 	return HitTestPosition.None;
-		// }
+	public hitTest(point: Point, radius: number): HitTestPosition {
+		radius = radius || 5;
+		const outer = this.getOuterAnchorRegion(radius);
+		if (!(point instanceof Point) || !outer.containsPoint(point)) {
+			return HitTestPosition.None;
+		}
 
-		// if (this.getLeftTopPoint().getAnchorRegion(radius).containsPoint(point)) {
-		// 	// 左上角
-		// 	return HitTestPosition.LeftTop;
-		// } else if (this.getRightTopPoint().getAnchorRegion(radius).containsPoint(point)) {
-		// 	// 右上角
-		// 	return HitTestPosition.RightTop;
-		// } else if (this.getRightBottomPoint().getAnchorRegion(radius).containsPoint(point)) {
-		// 	// 右下角
-		// 	return HitTestPosition.RightBottom;
-		// } else if (this.getLeftBottomPoint().getAnchorRegion(radius).containsPoint(point)) {
-		// 	// 坐下角
-		// 	return HitTestPosition.LeftBottom;
-		// } else if (this.getLeftAnchorRegion(radius).containsPoint(point)) {
-		// 	// 左边框
-		// 	return HitTestPosition.Left;
-		// } else if (this.getTopAnchorRegion(radius).containsPoint(point)) {
-		// 	// 上边框
-		// 	return HitTestPosition.Top;
-		// } else if (this.getRightAnchorRegion(radius).containsPoint(point)) {
-		// 	// 右边框
-		// 	return HitTestPosition.Right;
-		// } else if (this.getBottomAnchorRegion(radius).containsPoint(point)) {
-		// 	// 下边框；
-		// 	return HitTestPosition.Bottom;
-		// } else {
-		// 	return HitTestPosition.Inside;
-		// }
+		if (this.getLeftTopPoint().getAnchorRegion(radius).containsPoint(point)) {
+			// 左上角
+			return HitTestPosition.LeftTop;
+		} else if (this.getRightTopPoint().getAnchorRegion(radius).containsPoint(point)) {
+			// 右上角
+			return HitTestPosition.RightTop;
+		} else if (this.getRightBottomPoint().getAnchorRegion(radius).containsPoint(point)) {
+			// 右下角
+			return HitTestPosition.RightBottom;
+		} else if (this.getLeftBottomPoint().getAnchorRegion(radius).containsPoint(point)) {
+			// 坐下角
+			return HitTestPosition.LeftBottom;
+		} else if (this.getLeftAnchorRegion(radius).containsPoint(point)) {
+			// 左边框
+			return HitTestPosition.Left;
+		} else if (this.getTopAnchorRegion(radius).containsPoint(point)) {
+			// 上边框
+			return HitTestPosition.Top;
+		} else if (this.getRightAnchorRegion(radius).containsPoint(point)) {
+			// 右边框
+			return HitTestPosition.Right;
+		} else if (this.getBottomAnchorRegion(radius).containsPoint(point)) {
+			// 下边框；
+			return HitTestPosition.Bottom;
+		} else {
+			return HitTestPosition.Inside;
+		}
 	}
 
 	/**
